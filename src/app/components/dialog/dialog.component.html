@@ -1,0 +1,8 @@
+<div mat-dialog-content>
+  <p *ngIf="data.addRole">Are you sure do you want to add {{data.role}} role to the {{data.employee}} employee?</p>
+  <p *ngIf="data.removeRole">Are you sure do you want to remove {{data.role}} role for to the {{data.employee}} employee?</p>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()" (click)="onActionClick('NO')">No</button>
+  <button mat-button [mat-dialog-close] cdkFocusInitial (click)="onActionClick('YES')">Yes</button>
+</div>

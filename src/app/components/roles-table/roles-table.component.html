@@ -1,0 +1,49 @@
+<mat-accordion *ngIf="(employeesList$ | async) as employees" class="example-headers-align" multi>
+  <mat-expansion-panel *ngFor="let employee of employees">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        {{employee.firstName}} {{employee.lastName}}
+      </mat-panel-title>
+      <mat-panel-description>
+        <div *ngIf="employee.roles?.length">
+            <span>{{displayRoleName(employee.roles[0])}}; </span>
+            <span *ngIf="checkIfMultipleRole(employee.roles).multipleRoles">+ {{checkIfMultipleRole(employee.roles).rolesSize}} role(s)</span>
+        </div>
+        <div *ngIf="!employee.roles || !employee.roles.length">No Roles Assigned</div>
+        <mat-icon>account_circle</mat-icon>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <mat-form-field class="example-chip-list">
+      <mat-chip-list #chipList aria-label="Fruit selection">
+        <mat-chip *ngFor="let role of employee.roles" [selectable]
+                  [removable] (removed)="remove(role, employee)">
+          {{displayRoleName(role)}}
+          <mat-icon matChipRemove>cancel</mat-icon>
+        </mat-chip>
+        <input
+          placeholder="Employee roles..."
+          #rolesInput
+          [formControl]="roleControl"
+          [matAutocomplete]="auto"
+          [matChipInputFor]="chipList"
+          [matChipInputSeparatorKeyCodes]="separatorKeysCodes">
+      </mat-chip-list>
+      <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectRole(employee, $event.option.value)">
+        <mat-option *ngFor="let role of defaultRoleList$ | async" [value]="role">
+          {{role.displayName}}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+
+    <mat-label>Permission List</mat-label>
+    <mat-selection-list #permissions>
+      <mat-list-option *ngFor="let permission of permissionsList"
+        checkboxPosition="before"
+        [disabled]="!checkPermission(permission.id, employee.permissions)"
+        [selected]="checkPermission(permission.id, employee.permissions)">
+        {{permission.displayName}}
+      </mat-list-option>
+    </mat-selection-list>
+  </mat-expansion-panel>
+</mat-accordion>

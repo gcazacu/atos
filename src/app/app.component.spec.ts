@@ -1,8 +1,12 @@
 import { TestBed, async } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
+import { provideMockStore, MockStore } from '@ngrx/store/testing';
 
 describe('AppComponent', () => {
+  let store: MockStore;
+  const initialState = { };
+
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
@@ -11,6 +15,9 @@ describe('AppComponent', () => {
       declarations: [
         AppComponent
       ],
+      providers: [
+        provideMockStore({ initialState }),
+      ]
     }).compileComponents();
   }));
 
@@ -20,16 +27,4 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have as title 'atos-prj'`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.debugElement.componentInstance;
-    expect(app.title).toEqual('atos-prj');
-  });
-
-  it('should render title', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('.content span').textContent).toContain('atos-prj app is running!');
-  });
 });
